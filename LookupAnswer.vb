@@ -1,41 +1,22 @@
 ﻿Option Strict Off
 Imports JHSoftware.SimpleDNS
 Imports JHSoftware.SimpleDNS.Plugin
-Imports Microsoft.ClearScript.V8
 
 Public Class LookupAnswer
+  Inherits LookupBase
   Implements ILookupAnswer
   Implements IOptionsUI
 
-  Public Property Host As IHost Implements IPlugInBase.Host
-  Private CfgJS As String
-  Private Engine As V8ScriptEngine
-
-  Public Function GetPlugInTypeInfo() As IPlugInBase.PlugInTypeInfo Implements IPlugInBase.GetTypeInfo
-    Return New IPlugInBase.PlugInTypeInfo With {
+  Public Overrides Function GetTypeInfo() As TypeInfo Implements IPlugInBase.GetTypeInfo
+    Return New TypeInfo With {
       .Name = "JavaScript / Answer lookup",
-      .Description = "Executes a custom JavaScript function to do a DNS lookup",
+      .Description = "Executes a custom JavaScript function to do a DNS lookup returning multiple DNS records and/or special response properties (AA flag / RCode value)",
       .InfoURL = "https://simpledns.plus/plugin-javascript"
     }
   End Function
 
-  Public Sub LoadConfig(config As String, instanceID As Guid, dataPath As String) Implements IPlugInBase.LoadConfig
-    CfgJS = config
-  End Sub
-
-  Public Function StartService() As Task Implements IPlugInBase.StartService
-    Engine = New V8ScriptEngine()
-    Engine.AddHostObject("console", New JSConsole(AddressOf Host.LogLine))
-    Engine.Execute(CfgJS)
-    Return Task.CompletedTask
-  End Function
-
-  Public Sub StopService() Implements IPlugInBase.StopService
-    Engine.Dispose()
-    Engine = Nothing
-  End Sub
-
   Private Function ILookupAnswer_LookupAnswer(ctx As IRequestContext) As Task(Of DNSAnswer) Implements ILookupAnswer.LookupAnswer
+    LoadScript()
     Dim res = Engine.Evaluate("Lookup(" & CtxToJS(ctx) & ")")
     If res Is Nothing Then Return Task.FromResult(Of DNSAnswer)(Nothing)
     Dim rv = New DNSAnswer
@@ -102,31 +83,17 @@ Public Class LookupAnswer
     Return rv
   End Function
 
-  Public Function SaveState() As String Implements IPlugInBase.SaveState
-    Return Nothing
-  End Function
-
-  Public Sub LoadState(state As String) Implements IPlugInBase.LoadState
-    REM nothing
-  End Sub
-
-  Public Function InstanceConflict(config1 As String, config2 As String, ByRef errorMsg As String) As Boolean Implements IPlugInBase.InstanceConflict
-    Return False
-  End Function
-
   Public Function GetOptionsUI(instanceID As Guid, dataPath As String) As OptionsUI Implements IOptionsUI.GetOptionsUI
     Dim ctrl = New CtrlOptions
-    ctrl.txtJS.Text =
+    ctrl.TheScript =
 "// Sample script for JavaScript / Answer lookup plug-in" & vbCrLf &
 "function Lookup(context) {" & vbCrLf &
 "  if(context.qname !== 'example.com') return null;" & vbCrLf &
 "  if(context.qtype !== 'MX') return null;" & vbCrLf &
 "  return { aa: true," & vbCrLf &
 "           answer: [" & vbCrLf &
-"             { name: context.qname," & vbCrLf &
-"               type: 'MX'," & vbCrLf &
-"               ttl: 300," & vbCrLf &
-"               data: '10 mail.example.com.' }" & vbCrLf &
+"             { name: context.qname, type: 'MX', ttl: 300, data: '10 server1.example.com.' }," & vbCrLf &
+"             { name: context.qname, type: 'MX', ttl: 300, data: '20 server2.example.com.' }" & vbCrLf &
 "           ]};" & vbCrLf &
 "}"
     Return ctrl

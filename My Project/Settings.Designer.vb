@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.JavaScript.My.MySettings
+        Friend ReadOnly Property Settings() As Global.JavaScriptPlugIn.My.MySettings
             Get
-                Return Global.JavaScript.My.MySettings.Default
+                Return Global.JavaScriptPlugIn.My.MySettings.Default
             End Get
         End Property
     End Module
