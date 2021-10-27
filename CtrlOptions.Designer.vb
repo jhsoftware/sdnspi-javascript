@@ -93,9 +93,9 @@ Partial Class CtrlOptions
     Me.Label1.Location = New System.Drawing.Point(0, 0)
     Me.Label1.Margin = New System.Windows.Forms.Padding(3, 0, 3, 5)
     Me.Label1.Name = "Label1"
-    Me.Label1.Size = New System.Drawing.Size(115, 13)
+    Me.Label1.Size = New System.Drawing.Size(160, 13)
     Me.Label1.TabIndex = 0
-    Me.Label1.Text = "Store JavaScript code:"
+    Me.Label1.Text = "Where to store JavaScript code:"
     '
     'radFile
     '
@@ -103,9 +103,9 @@ Partial Class CtrlOptions
     Me.radFile.Location = New System.Drawing.Point(0, 44)
     Me.radFile.Margin = New System.Windows.Forms.Padding(3, 3, 0, 3)
     Me.radFile.Name = "radFile"
-    Me.radFile.Size = New System.Drawing.Size(97, 17)
+    Me.radFile.Size = New System.Drawing.Size(106, 17)
     Me.radFile.TabIndex = 3
-    Me.radFile.Text = "In separate file:"
+    Me.radFile.Text = "In a separate file:"
     Me.radFile.UseVisualStyleBackColor = True
     '
     'radNoFile
@@ -114,10 +114,10 @@ Partial Class CtrlOptions
     Me.radNoFile.Checked = True
     Me.radNoFile.Location = New System.Drawing.Point(0, 21)
     Me.radNoFile.Name = "radNoFile"
-    Me.radNoFile.Size = New System.Drawing.Size(145, 17)
+    Me.radNoFile.Size = New System.Drawing.Size(304, 17)
     Me.radNoFile.TabIndex = 1
     Me.radNoFile.TabStop = True
-    Me.radNoFile.Text = "With plug-in configuration"
+    Me.radNoFile.Text = "With plug-in configuration in the Simple DNS Plus database"
     Me.radNoFile.UseVisualStyleBackColor = True
     '
     'txtFile

@@ -102,6 +102,7 @@ Partial Class frmScript
         Me.MinimumSize = New System.Drawing.Size(600, 400)
         Me.Name = "frmScript"
         Me.ShowIcon = False
+        Me.ShowInTaskbar = False
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "JavaScript"
